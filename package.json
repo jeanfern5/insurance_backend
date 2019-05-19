@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/jeanfern5/insurance_backend#readme",
   "dependencies": {
-    "mysql": "^2.17.1"
+    "commander": "^2.20.0",
+    "mysql": "^2.17.1",
+    "vorpal": "^1.12.0"
   }
 }

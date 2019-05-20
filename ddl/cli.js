@@ -1,86 +1,144 @@
 #!/usr/bin/env node
 const program = require('commander');
+
 const utils = require('./utils');
-const yaro_db = require('./yarodb');
+const yaro_db = require('./yaro_db');
 const client_db = require('./client_db');
 
 
 program
-    .command('create_client_database <client_database_name>')
-    .description('Create the ClientDB')
-    .action(function(client_database_name){
-    connection = utils.getConnection();
-    client_db.createClientDatabase(connection, client_database_name);
-    connection.end()
+    .command('create_client <client_name>')
+    .description('Create ClientDB database')
+    .action(function(client_name){
+        connection = utils.getConnection();
+        client_db.createClientDatabase(connection, client_name);
+        connection.end();
     });
 
 program
-    .command('create_client_claims_table <client_database_name>')
+    .command('create_client_claims <client_name>')
     .description('Create the ClientDB.CLAIMS table')
-    .action(function(client_database_name){
-    connection = utils.getConnection();
-    client_db.createClientDatabase(connection, client_database_name);
-    connection.end()
+    .action(function(client_name){
+        connection = utils.getConnection();
+        client_db.createClientClaimsTable(connection, client_name);
+        connection.end();
     });
 
 program
-    .command('create_client_claims_type_table <client_database_name>')
-    .description('Create the ClientDB.CLAIM_TYPE table')
-    .action(function(client_database_name){
-    connection = utils.getConnection();
-    client_db.createClientDatabase(connection, client_database_name);
-    connection.end()
+    .command('create_client_claim_types <client_name>')
+    .description('Create the ClientDB.CLAIM_TYPES table')
+    .action(function(client_name){
+        connection = utils.getConnection();
+        client_db.createClientClaimTypesTable(connection, client_name);
+        connection.end();
+    });
+
+program
+    .command('drop_client <client_name>')
+    .description('Drop ClientDB database')
+    .action(function(client_name){
+        connection = utils.getConnection();
+        client_db.dropClientDatabase(connection, client_name);
+        connection.end();
+    });
+
+program
+    .command('drop_client_claims <client_name>')
+    .description('Drop ClientDB.CLAIMS table')
+    .action(function(client_name){
+        connection = utils.getConnection();
+        client_db.dropClientClaimsTable(connection, client_name);
+        connection.end();
+    });
+
+program
+    .command('drop_client_claim_types <client_name>')
+    .description('Drop ClientDB.CLAIMS_TYPES table')
+    .action(function(client_name){
+        connection = utils.getConnection();
+        client_db.dropClientClaimTypesTable(connection, client_name);
+        connection.end();
     });
 
 program
     .command('create_yaro_user')
     .description('Create the YaroDB.YARO_USER table')
     .action(function(){
-    connection = utils.getConnection();
-    yaro_db.createYaroUserTable(connection);
-    connection.end()
+        connection = utils.getConnection();
+        yaro_db.createYaroUserTable(connection);
+        connection.end();
     });
+
+program
+    .command('create_yaro_client')
+    .description('Drop the YaroDB.YARO_CLIENT table')
+    .action(function(){
+        connection = utils.getConnection();
+        yaro_db.createYaroClientTable(connection);
+        connection.end();
+    });
+
 
 program
     .command('drop_yaro_user')
     .description('Drop the YaroDB.YARO_USER table')
     .action(function(){
-    connection = utils.getConnection();
-    yaro_db.dropYaroUserTable(connection);
-    connection.end()
+        connection = utils.getConnection();
+        yaro_db.dropYaroUserTable(connection);
+        connection.end();
     });
 
-
 program
-    .command('drop_yaro_user')
-    .description('Drop the YaroDB.YARO_USER table')
+    .command('drop_yaro_client')
+    .description('Drop the YaroDB.YARO_CLIENT table')
     .action(function(){
-    connection = utils.getConnection();
-    yaro_db.createYaroClientTable(connection);
-    connection.end()
+        connection = utils.getConnection();
+        yaro_db.dropYaroClientTable(connection);
+        connection.end();
     });
 
 
 program 
-    .command('create_all_yaro')
-    .description('TODO')
+    .command('create_yaro_archit')
+    .description('Create Yaro architecture: creates Yaro user table and Yaro client table')
     .action(function(){
         connection = utils.getConnection();
         yaro_db.createYaroUserTable(connection);
         yaro_db.createYaroClientTable(connection);
-        connection.end()
+        connection.end();
     });
 
 program
-    .command('create_all_client <client_database_name>')
-    .description('TODO')
-    .action(function(client_database_name){    
-    connection = utils.getConnection();
-    client_db.createClientDatabase(connection, client_database_name);
-    client_db.createClientClaimsTable(connection, client_database_name);
-    client_db.createClientClaimTypeTable(connection, client_database_name);
-    connection.end()
+    .command('create_client_archit <client_name>')
+    .description('Create client architecture: creates client database, client claims table, and client claim types table')
+    .action(function(client_name){    
+        connection = utils.getConnection();
+        client_db.createClientDatabase(connection, client_name);
+        client_db.createClientClaimsTable(connection, client_name);
+        client_db.createClientClaimTypesTable(connection, client_name);
+        connection.end();
+    });
+
+program 
+    .command('drop_yaro_archit')
+    .description('Drop Yaro architecture: drops Yaro user table and Yaro client table')
+    .action(function(){
+        connection = utils.getConnection();
+        yaro_db.dropYaroUserTable(connection);
+        yaro_db.dropYaroClientTable(connection);
+        connection.end();
+    });
+
+program
+    .command('drop_client_archit <client_name>')
+    .description('Drop client architecture: drops client database, client claims table, and client claim types table')
+    .action(function(client_name){    
+        connection = utils.getConnection();
+        client_db.dropClientDatabase(connection, client_name);
+        client_db.dropClientClaimsTable(connection, client_name);
+        client_db.dropClientClaimTypesTable(connection, client_name);
+        connection.end();
     });
 
 
-program.parse(process.argv)
+program.parse(process.argv);

@@ -7,7 +7,7 @@ module.exports = buildSchema(`
         yaro_user_id: ID!,
         client_id: ID!,
         claim_type_id: ID!,
-        claim_amount: INT!
+        claim_amount: Int!
     }
     type CLAIM_TYPE {
         client_type_id: ID!,
@@ -15,9 +15,9 @@ module.exports = buildSchema(`
         description: String!,
     }
     input CLAIMS_INPUT{
-        claim_amount: INT!  
+        claim_amount: Int!  
     }
-    type CLAIM_TYPES_INPUT {
+    input CLAIM_TYPES_INPUT {
         procedure: String!,
         description: String!,
     }

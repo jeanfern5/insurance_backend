@@ -10,7 +10,7 @@ program
     .command('create_yaro_db')
     .description('Create Yaro database: creates database YaroDB and tables YARO_USER, YARO_CLIENT, YARO_ACTIVE_USER')
     .action(function(){
-        connection = utils.getConnection();
+        const connection = utils.getConnection();
         yaro_db.createYaroDatabase(connection);
         yaro_db.createYaroUserTable(connection);
         yaro_db.createYaroClientTable(connection);
@@ -22,7 +22,7 @@ program
     .command('create_client_db <client_name>')
     .description('Create client database: creates database <client_name> and tables CLAIM_TYPES, CLAIMS')
     .action(function(client_name){    
-        connection = utils.getConnection();
+        const connection = utils.getConnection();
         client_db.createClientDatabase(connection, client_name);
         client_db.createClientClaimsTable(connection, client_name);
         client_db.createClientClaimTypeTable(connection, client_name);

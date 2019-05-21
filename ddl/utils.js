@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 
 
-const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_PASSWORD = process.env.DB_PASSWORD;
 if (!DB_PASSWORD) {
     throw Error("Please set DB_PASSWORD environment variable to connect")
 }

@@ -8,36 +8,27 @@ function createClientDatabase(connection, clientName){
 				if (error.code === "ER_DB_CREATE_EXISTS") {
 					console.log(`Failed to create ${clientName} database because it already exists.`);
 				}else{
-					console.log(`Unhandled error ${error.code}`);
+					console.log(`Unhandled error ${error.code}, ${error}`);
 				}
 			} else {
 				console.log(`Successfully created ${clientName} database`);
-				insertClientDetails(connection, clientName);
-				
-				// connection.query(`INSERT INTO YaroDB.YARO_CLIENT(client_db_name, client_name)
-				// 				  VALUES (${clientName}, ${clientName})`),
-				// function (error, results, fields) {
-				// 	if (error) {
-				// 		console.log(`Unable to add client details to YaroDB.YARO_CLIENT table`)
-				// 	}
-				// }
 			}
 		}
 	)
 };
 
-// function insertClientDetails(connection, clientName){
-// 	connection.query(`INSERT INTO YaroDB.YARO_CLIENT(client_db_name, client_name)
-// 					 VALUES (${clientName}, ${clientName})`),
-// 		function (error, results, fields) {
-// 			if (error) {
-// 					console.log(`Unhandled error ${error.code}`);
-// 			} else {
-// 				console.log(`Successfully added client details to YaroDB.YARO_CLIENT table`);
-// 			}
-// 		}
-// 	)
-// };
+function insertClientDetails(connection, clientName){
+	connection.query(`INSERT INTO YaroDB.YARO_CLIENT(client_db_name, client_name)
+					 VALUES ("${clientName}", "${clientName}")`),
+		function (error, results, fields) {
+			if (error) {
+					console.log(`Unhandled error ${error.code}`);
+			} else {
+				console.log(`Successfully added client details to YaroDB.YARO_CLIENT table`);
+			}
+		}
+	
+};
 
 function createClientClaimsTable(connection, clientName){
 	connection.query(`CREATE TABLE ${clientName}.CLAIMS (
@@ -65,7 +56,7 @@ function createClientClaimsTable(connection, clientName){
 function createClientClaimTypeTable(connection, clientName) {
 	connection.query(`CREATE TABLE ${clientName}.CLAIM_TYPE (
 		claim_type_id INT AUTO_INCREMENT PRIMARY KEY,
-		procedure VARCHAR(255) NOT NULL,
+		procedure_name VARCHAR(255) NOT NULL,
 		description VARCHAR(512) NOT NULL
 	)`, function (error, results, fields) {
 			if (error) {
@@ -74,7 +65,7 @@ function createClientClaimTypeTable(connection, clientName) {
 				} else if (error.code === "ER_BAD_DB_ERROR") {
 					console.log(`Failed to create ${clientName}.CLAIM_TYPE table because database ${clientName} does not exist.`);
 				} else {
-					console.log(`Unhandled error: ${error.code}`);
+					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
 				console.log(`Successfully created ${clientName}.CLAIM_TYPE table`);
@@ -142,16 +133,10 @@ module.exports = {
 	createClientClaimTypeTable,
 	dropClientDatabase,
 	dropClientClaimsTable,
-	dropClientClaimTypeTable
+	dropClientClaimTypeTable,
+	insertClientDetails
 }
 
-
-/*
-connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-	  if (error) throw error;
-	  console.log('The solution is: ', results[0].solution);
-});
-*/
 
 
 

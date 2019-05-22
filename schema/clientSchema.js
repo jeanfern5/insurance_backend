@@ -22,7 +22,7 @@ module.exports = buildSchema(`
         description: String!,
     }
     type RootQuery {
-        listClaims: [CLAIMS!]!
+        listClaims(username: String!): [CLAIMS!]!
         getClaims(claimId: ID!): CLAIMS!
     }
     schema {

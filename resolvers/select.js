@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const clientDB = require('../ddl/client_db');
+
 
 const DB_PASSWORD = process.env.DB_PASSWORD
 if (!DB_PASSWORD) {
@@ -11,80 +11,103 @@ const pool  = mysql.createPool({
 		  'host' : 'yarodb.c01iybcdwlow.us-east-2.rds.amazonaws.com',
 		  'user' : 'db_admin',
 			'password' : DB_PASSWORD,
-			'database': 'yarodb'
+			'database': 'YaroDB'
 });
 
 module.exports = {
-	listClaims: async (args) => {
-		console.log('--->', args)
-		return 'WOOOOOO!'
+	listClaims: async (input) => {
+		let username = input[`username`];
+		let clients = [];
+
+		let promise = new Promise ((resolve, reject) => {
+			pool.query(`SELECT yaro_user_id FROM YaroDB.YARO_USER WHERE username = '${username}'`,
+				function (err, results) {
+					if (err) {
+						console.log("ERROR:", err);
+						throw err;
+					}
+
+					let yaro_user_id = results[0][`yaro_user_id`];
+					console.log('---->yaro_user_id', yaro_user_id);
+					resolve(yaro_user_id); 
+				}
+			)	
+		});
+
+		promise.then((yaro_user_id) => {
+			console.log('--->yaro_user_id2', yaro_user_id)
+			pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT`,
+				function (err, results){
+					if (err) {
+						console.log("ERROR:", err);
+						throw err;
+					}
+
+					for (let i=0; i<results.length; i++) {
+						let clientDB = results[i][`client_db_name`];
+						console.log('---->clientDB3', clientDB)
+
+						pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}' `,
+							function(err, result){
+								if (err) {
+									console.log("ERROR:", err);
+									throw err;
+								}
+
+								clients.append(result[clientDB]);
+							}
+						)
+					}
+				}
+			)
+		})
+		
+
 		// return new Promise((resolve, reject) => {
-		// 	response = []
-		// 	pool.query(`select client_db_name FROM YaroDB.YARO_CLIENT`,
-		// 		function (err, results){
-		// 			if(err) console.log("TODO: HANDLE THIS ERROR", err);
-		// 			for (db_name in results['some_key_that_references_db']){
-		// 				pool.query(`select * from ${db_name}.CLAIMS`,
-		// 					function(err, result){
-		// 						if(err) console.log("TODO ...");
-		// 						response.append(result['some_key_for_row']);
-		// 					}
-		// 				)
-		// 			}
-		// 		}
-		// 	)
+		// 	let response = [];
+
+			// pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT`,
+			// 	function (err, results){
+					// if (err) {
+					// 	console.log("ERROR:", err);
+					// 	throw err;
+					// }
+
+					// for (let i=0; i<results.length; i++) {
+					// 	let clientDB = results[i][`client_db_name`];
+					// 	console.log('---->', clientDB)
+
+					// 	pool.query(`SELECT * FROM ${clientDB}.CLAIMS`,
+					// 		function(err, result){
+					// 			if (err) {
+					// 				console.log("ERROR:", err);
+					// 				throw err;
+					// 			}
+
+					// 			response.append(result[clientDB]);
+					// 		}
+					// 	)
+					// }
+
+			// 		// for (clientDB in results[`client_db_name`]){
+			// 		// 	pool.query(`SELECT * FROM ${clientDB}.CLAIMS`,
+			// 		// 		function(err, result){
+			// 		// 			if (err) {
+			// 		// 				console.log("ERROR:", err);
+			// 		// 				throw err;
+			// 		// 			}
+
+			// 		// 			response.append(result[clientDB]);
+			// 		// 		}
+			// 		// 	)
+			// 		// }
+			// 	}
+			// )
 		// 	resolve(response);
 		// })
 	},
-	getClaim: async (args) => {
+	getClaim: async (claimId) => {
 		
 	},
 
 }
-
-// exports.listClaims = ({ id }) => {
-// 	return new Promise((resolve, reject) => {
-// 		response = []
-// 	  pool.query(`select client_db_name FROM YaroDB.YARO_CLIENT`,
-// 	  function (err, results){
-// 		  if(err) console.log("TODO: HANDLE THIS ERROR");
-// 		  for db_name in results['some_key_that_references_db']{
-// 			  pool.query(`select * from ${db_name}.CLAIMS`,
-// 			  function(err, result){
-// 				  if(err): console.log("TODO ...");
-// 				  response.append(result['some_key_for_row']);
-// 			  }
-// 			 )
-// 		  }
-  
-// 	  }
-// 	  resolve(response);
-	  
-//   )
-  
-// 	  });
-// 	});
-//   };
-  
-  
-//   const viewerType = new GraphQLObjectType({
-// 	name: 'Viewer',
-// 	fields: () => ({
-// 	  user: {
-// 		type: userType,
-// 		args: {
-// 		  userid: {
-// 			type: GraphQLInt,
-// 		  },
-// 		  claimid: {
-// 			  type: GraphQLInt,
-// 		  }
-// 		},
-// 		resolve: (rootValue, args) => {
-// 		  return listClaims({ id : args.userid }).then(value => value);
-// 		},
-// 	  },
-// 	}),
-//   });
-  
-  

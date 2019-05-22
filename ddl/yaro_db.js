@@ -23,6 +23,7 @@ function createYaroUserTable(connection) {
 	connection.query(`CREATE TABLE YaroDB.YARO_USER(
 		yaro_user_id INT AUTO_INCREMENT PRIMARY KEY,
 		email VARCHAR(255) UNIQUE NOT NULL,
+		username VARCHAR(64) UNIQUE NOT NULL,
 		first_name VARCHAR(64) NOT NULL,
 		last_name VARCHAR(64) NOT NULL,
 		city VARCHAR(64) NOT NULL,

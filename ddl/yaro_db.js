@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-// This is a stand alone script
-
+// Stand alone script 
 
 function createYaroDatabase(connection){
 	connection.query(`CREATE DATABASE YaroDB`,
@@ -9,7 +8,7 @@ function createYaroDatabase(connection){
 				if (error.code === "ER_DB_CREATE_EXISTS") {
 					console.log(`Failed to create YaroDB database because it already exists.`);
 				}else{
-					console.log(`Unhandled error ${error.code}`);
+					console.log(`Unhandled error ${error}`);
 				}
 			} else {
 				console.log(`Successfully created YaroDB database`);
@@ -36,7 +35,7 @@ function createYaroUserTable(connection) {
 				if (error.code === "ER_TABLE_EXISTS_ERROR") {
 					console.log("Failed to create YaroDB.YARO_USER table because it already exists.");
 				} else {
-					console.log(`Unhandled error: ${error.code}`);
+					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
 				console.log("Successfully created YaroDB.YARO_USER table ");
@@ -56,7 +55,7 @@ function createYaroClientTable(connection) {
 				if (error.code === "ER_TABLE_EXISTS_ERROR") {
 					console.log("Failed to create YaroDB.YARO_CLIENT table because it already exists.");
 				}else{
-					console.log(`Unhandled error: ${error.code}`);
+					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
 				console.log("Successfully created YaroDB.YARO_CLIENT table");
@@ -73,12 +72,12 @@ function createYaroActiveUserTable(connection) {
 	)`, function (error, results, fields) {
 			if (error) {
 				if (error.code === "ER_TABLE_EXISTS_ERROR") {
-					console.log("Failed to create YaroDB.YARO_CLIENT table because it already exists.");
+					console.log("Failed to create YaroDB.YARO_ACTIVE_USER table because it already exists.");
 				}else{
-					console.log(`Unhandled error: ${error.code}`);
+					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
-				console.log("Successfully created YaroDB.YARO_CLIENT table");
+				console.log("Successfully created YaroDB.YARO_ACTIVE_USER table");
 			}
 		}
 	)
@@ -91,7 +90,7 @@ function dropYaroDatabase(connection) {
 				if (error.code === "ER_DB_DROP_EXISTS") {
 					console.log(`Failed to drop YaroDB database because it does not exist.`);
 				}else{
-					console.log(`Unhandled error: ${error.code}`);
+					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
 				console.log(`Successfully dropped YaroDB database.`);
@@ -107,7 +106,7 @@ function dropYaroUserTable(connection) {
 				if (error.code === "ER_BAD_TABLE_ERROR") {
 				    console.log("Failed to drop YaroDB.YARO_USER table because it does not exist.");
 				} else {
-				    console.log(`Unhandled error: ${error.code}`);
+				    console.log(`Unhandled error: ${error}`);
 				}
 			} else {
 				console.log("Successfully dropped YaroDB.YARO_USER table");
@@ -139,7 +138,7 @@ function dropYaroActiveUserTable(connection) {
 				if (error.code === "ER_BAD_TABLE_ERROR") {
 				    console.log("Failed to drop YaroDB.YARO_ACTIVE_USER table because it does not exist.");
 				} else {
-				    console.log(`Unhandled error: ${error.code}`);
+				    console.log(`Unhandled error: ${error}`);
 				}
 			} else {
 				console.log("Successfully dropped YaroDB.YARO_ACTIVE_USER table");
@@ -154,9 +153,11 @@ module.exports = {
 	createYaroUserTable, 
 	createYaroClientTable, 
 	createYaroActiveUserTable,
+
 	dropYaroDatabase,
 	dropYaroUserTable,
-	dropYaroClientTable
+	dropYaroClientTable,
+	dropYaroActiveUserTable
 };
 
 

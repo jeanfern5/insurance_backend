@@ -42,9 +42,19 @@ module.exports = {
 						console.log("ERROR:", err);
 						throw err;
 					}
-
+					
+					let select_str = ""
 					for (let i=0; i<results.length; i++) {
-						let clientDB = results[i][`client_db_name`];
+						let clientDB = results[0][`client_db_name`];
+						select_str += `SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}'`
+						if(i != results.length - 1){
+							select_str += " UNION "
+						}
+					pool.query(select_str,function()){
+
+					}
+
+						clientDB = results[i][`client_db_name`];
 						console.log('---->clientDB3', clientDB)
 
 						pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}' `,

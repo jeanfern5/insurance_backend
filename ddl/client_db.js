@@ -1,6 +1,5 @@
 //Use this endpoint to create a customer database
 
-
 function createClientDatabase(connection, clientName){
 	connection.query(`CREATE DATABASE ${clientName}`,
 		function (error, results, fields) {
@@ -8,7 +7,7 @@ function createClientDatabase(connection, clientName){
 				if (error.code === "ER_DB_CREATE_EXISTS") {
 					console.log(`Failed to create ${clientName} database because it already exists.`);
 				}else{
-					console.log(`Unhandled error ${error.code}, ${error}`);
+					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
 				console.log(`Successfully created ${clientName} database`);
@@ -17,17 +16,16 @@ function createClientDatabase(connection, clientName){
 	)
 };
 
-function insertClientDetails(connection, clientName){
-	connection.query(`INSERT INTO YaroDB.YARO_CLIENT(client_db_name, client_name)
+function insertClientDetailsIntoYaroDB(connection, clientName){
+	try {
+		connection.query(`INSERT INTO YaroDB.YARO_CLIENT(client_db_name, client_name)
 					 VALUES ("${clientName}", "${clientName}")`),
-		function (error, results, fields) {
-			if (error) {
-					console.log(`Unhandled error ${error.code}`);
-			} else {
-				console.log(`Successfully added client details to YaroDB.YARO_CLIENT table`);
-			}
-		}
-	
+
+		console.log(`Successfully added client details to YaroDB.YARO_CLIENT table`);
+	} catch {
+		console.log(`Error addeding client details to YaroDB.YARO_CLIENT table`);
+
+	}
 };
 
 function createClientClaimsTable(connection, clientName){
@@ -44,7 +42,7 @@ function createClientClaimsTable(connection, clientName){
 				} else if (error.code === "ER_BAD_DB_ERROR") {
 					console.log(`Failed to create ${clientName}.CLAIMS table because database ${clientName} does not exist.`);
 				} else {
-					console.log(`Unhandled error: ${error.code}`);
+					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
 				console.log(`Successfully created ${clientName}.CLAIMS table`);
@@ -74,68 +72,14 @@ function createClientClaimTypeTable(connection, clientName) {
 	)
 };
 
-function dropClientDatabase(connection, clientName) {
-	connection.query(`DROP DATABASE ${clientName}`
-		, function (error, results, fields) {
-			if (error) {
-				if (error.code === "ER_DB_DROP_EXISTS") {
-					console.log(`Failed to drop ${clientName} database because it does not exist.`);
-				}else{
-					console.log(`Unhandled error: ${error.code}`);
-				}
-			} else {
-				console.log(`Successfully dropped ${clientName} database.`);
-			} 
-		}
-	)
-};
-
-function dropClientClaimsTable(connection, clientName) {
-	connection.query(`DROP TABLE ${clientName}.CLAIMS`
-		, function (error, results, fields) {
-			if (error) {
-				if (error.code === "ER_TABLE_DROP_ERROR") {
-					console.log(`Failed to drop ${clientName}.CLIENT table because it was already removed.`);
-				} else if (error.code === "ER_BAD_TABLE_ERROR") {
-					console.log(`Failed to drop ${clientName}.CLIENT table because table does not exist.`);
-				} else {
-					console.log(`Unhandled error: ${error.code}`);
-				}
-			} else {
-				console.log(`Successfully dropped ${clientName}.CLAIMS table`);
-			} 
-		}
-	)
-};
-
-function dropClientClaimTypeTable(connection, clientName) {
-	connection.query(`DROP TABLE ${clientName}.CLAIM_TYPE`
-		, function (error, results, fields) {
-			if (error) {
-				if (error.code === "ER_TABLE_DROP_ERROR") {
-					console.log(`Failed to drop ${clientName}.CLAIM_TYPE table because it was already removed.`);
-				} else if (error.code === "ER_BAD_TABLE_ERROR") {
-					console.log(`Failed to drop ${clientName}.CLAIM_TYPE table because table does not exist.`);
-				} else {
-					console.log(`Unhandled error: ${error.code}`);
-				}
-			} else {
-				console.log(`Successfully dropped ${clientName}.CLAIM_TYPE table`);
-			} 
-		}
-	)
-};
-
 
 module.exports = { 
 	createClientDatabase, 
 	createClientClaimsTable, 
 	createClientClaimTypeTable,
-	dropClientDatabase,
-	dropClientClaimsTable,
-	dropClientClaimTypeTable,
-	insertClientDetails
-}
+
+	insertClientDetailsIntoYaroDB,
+};
 
 
 

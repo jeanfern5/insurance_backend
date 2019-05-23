@@ -26,7 +26,7 @@ program
         client_db.createClientDatabase(connection, client_name);
         client_db.createClientClaimsTable(connection, client_name);
         client_db.createClientClaimTypeTable(connection, client_name);
-        client_db.insertClientDetails(connection, client_name);
+        client_db.insertClientDetailsIntoYaroDB(connection, client_name);
         connection.end();
     });
 

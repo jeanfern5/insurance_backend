@@ -4,6 +4,7 @@ const program = require('commander');
 const utils = require('./utils');
 const yaro_db = require('./yaro_db');
 const client_db = require('./client_db');
+const dummy_data = require('./insert_dummy_data');
 
 
 program 
@@ -29,6 +30,15 @@ program
         client_db.insertClientDetailsIntoYaroDB(connection, client_name);
         connection.end();
     });
+
+// program
+//     .command('insert_dummy_data')
+//     .description('Insert dummy data: TODO')
+//     .action(function(){    
+//         const connection = utils.getConnection();
+//         dummy_data.insertUserDetailsIntoYaroDB(connection);
+//         connection.end();
+//     });
 
 
 program.parse(process.argv);

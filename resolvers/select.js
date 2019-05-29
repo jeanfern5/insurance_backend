@@ -28,7 +28,7 @@ module.exports = {
 					}
 
 					let yaro_user_id = results[0][`yaro_user_id`];
-					console.log('---->yaro_user_id', yaro_user_id);
+					console.log('---->yaro_user_id1', yaro_user_id);
 					resolve(yaro_user_id); 
 				}
 			)	
@@ -36,37 +36,71 @@ module.exports = {
 
 		promise.then((yaro_user_id) => {
 			console.log('--->yaro_user_id2', yaro_user_id)
-			pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT`,
+			// SELECT client_id FROM YaroDB.YARO_ACTIVE_USER WHERE yaro_user_id = '${yaro_user_id}' AND active = 1
+			pool.query(`SELECT * FROM YaroDB.YARO_ACTIVE_USER WHERE yaro_user_id = '${yaro_user_id}' AND active = 1`,
 				function (err, results){
 					if (err) {
 						console.log("ERROR:", err);
 						throw err;
 					}
-					
-					let select_str = ""
+					let selectUnion = '';
+
 					for (let i=0; i<results.length; i++) {
-						let clientDB = results[0][`client_db_name`];
-						select_str += `SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}'`
-						if(i != results.length - 1){
-							select_str += " UNION "
-						}
-					pool.query(select_str,function()){
+						let clientId = results[i]['client_id'];
 
-					}
-
-						clientDB = results[i][`client_db_name`];
-						console.log('---->clientDB3', clientDB)
-
-						pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}' `,
-							function(err, result){
+						pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT WHERE client_id = ${clientId}`,
+							function (err, results){
 								if (err) {
 									console.log("ERROR:", err);
 									throw err;
 								}
 
-								clients.append(result[clientDB]);
+								let clientDB = results[0]['client_db_name'];
+								console.log('---->3', results )
+
+								selectUnion += `SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}'`;
+								if (i != (results.length - 1)) {
+									selectUnion += ' UNION ';
+								}
+
+								console.log('------>4', selectUnion);
+
+								// pool.query(`${select_str}`,
+								// 	function (err, results){
+								// 		if (err) {
+								// 			console.log("ERROR:", err);
+								// 			throw err;
+								// 		}
+
+								// 		console.log('------->5', results)
+								// 	}
+								// )
 							}
 						)
+
+
+
+
+
+					//-------
+					// pool.query(select_str,function()){
+
+					// }
+
+					// 	clientDB = results[i][`client_db_name`];
+					// 	console.log('---->clientDB3', clientDB)
+
+					// 	pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}' `,
+					// 		function(err, result){
+					// 			if (err) {
+					// 				console.log("ERROR:", err);
+					// 				throw err;
+					// 			}
+
+					// 			clients.append(result[clientDB]);
+					// 		}
+					// 	)
+					//---------
 					}
 				}
 			)

@@ -1,25 +1,27 @@
 //Use this endpoint to create a customer database
 
 function createClientDatabase(connection, clientName){
-	connection.query(`CREATE DATABASE ${clientName}`,
+	let client_name = clientName.toUpperCase();
+	connection.query(`CREATE DATABASE ${client_name}`,
 		function (error, results, fields) {
 			if (error) {
 				if (error.code === "ER_DB_CREATE_EXISTS") {
-					console.log(`Failed to create ${clientName} database because it already exists.`);
+					console.log(`Failed to create ${client_name} database because it already exists.`);
 				}else{
 					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
-				console.log(`Successfully created ${clientName} database`);
+				console.log(`Successfully created ${client_name} database`);
 			}
 		}
 	)
 };
 
 function insertClientDetailsIntoYaroDB(connection, clientName){
+	let client_name = clientName.toUpperCase();
 	try {
 		connection.query(`INSERT INTO YaroDB.YARO_CLIENT(client_db_name, client_name)
-					 VALUES ("${clientName}", "${clientName}")`),
+					 VALUES ("${client_name}", "${client_name}")`),
 
 		console.log(`Successfully added client details to YaroDB.YARO_CLIENT table`);
 	} catch {
@@ -29,7 +31,8 @@ function insertClientDetailsIntoYaroDB(connection, clientName){
 };
 
 function createClientClaimsTable(connection, clientName){
-	connection.query(`CREATE TABLE ${clientName}.CLAIMS (
+	let client_name = clientName.toUpperCase();
+	connection.query(`CREATE TABLE ${client_name}.CLAIMS (
 		claim_id INT AUTO_INCREMENT PRIMARY KEY,
 		yaro_user_id INT NOT NULL,
 		client_id INT NOT NULL,
@@ -38,35 +41,36 @@ function createClientClaimsTable(connection, clientName){
 	)`,function (error, results, fields) {
 			if (error) {
 				if (error.code === "ER_TABLE_EXISTS_ERROR") {
-					console.log(`Failed to create ${clientName}.CLAIMS table because it already exists.`);
+					console.log(`Failed to create ${client_name}.CLAIMS table because it already exists.`);
 				} else if (error.code === "ER_BAD_DB_ERROR") {
-					console.log(`Failed to create ${clientName}.CLAIMS table because database ${clientName} does not exist.`);
+					console.log(`Failed to create ${client_name}.CLAIMS table because database ${client_name} does not exist.`);
 				} else {
 					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
-				console.log(`Successfully created ${clientName}.CLAIMS table`);
+				console.log(`Successfully created ${client_name}.CLAIMS table`);
 			}
 		}
 	)
 };
 
 function createClientClaimTypeTable(connection, clientName) {
-	connection.query(`CREATE TABLE ${clientName}.CLAIM_TYPE (
+	let client_name = clientName.toUpperCase();
+	connection.query(`CREATE TABLE ${client_name}.CLAIM_TYPE (
 		claim_type_id INT AUTO_INCREMENT PRIMARY KEY,
 		procedure_name VARCHAR(255) NOT NULL,
 		description VARCHAR(512) NOT NULL
 	)`, function (error, results, fields) {
 			if (error) {
 				if (error.code === "ER_TABLE_EXISTS_ERROR") {
-					console.log(`Failed to create ${clientName}.CLAIM_TYPE table because it already exists.`);
+					console.log(`Failed to create ${client_name}.CLAIM_TYPE table because it already exists.`);
 				} else if (error.code === "ER_BAD_DB_ERROR") {
-					console.log(`Failed to create ${clientName}.CLAIM_TYPE table because database ${clientName} does not exist.`);
+					console.log(`Failed to create ${client_name}.CLAIM_TYPE table because database ${client_name} does not exist.`);
 				} else {
 					console.log(`Unhandled error: ${error}`);
 				}
 			} else {
-				console.log(`Successfully created ${clientName}.CLAIM_TYPE table`);
+				console.log(`Successfully created ${client_name}.CLAIM_TYPE table`);
 			}
 		}
 	)

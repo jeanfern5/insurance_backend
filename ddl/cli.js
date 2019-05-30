@@ -33,13 +33,15 @@ program
 
 program
     .command('insert_dummy_data')
-    .description('Insert dummy data: Make sure that ATEALOT client database exists with client id 0810d1fc-830f-11e9-85ce-02568a3c. This adds user dummy data, connects user to a client, adds claim types and claims')
+    .description('Insert dummy data: Make sure client id matches client database. This adds user dummy data, connects user to a client, adds claim types and claims')
     .action(function(){    
         const connection = utils.getConnection();
         dummy_data.insertUserDetailsIntoYaroDB(connection);
         dummy_data.insertActiveUserIntoYaroDB(connection);
-        dummy_data.insertClaimTypeIntoClientDB(connection);
-        dummy_data.insertClaimIntoClientDB(connection);
+        dummy_data.insertClaimTypeIntoClientA(connection);
+        dummy_data.insertClaimIntoClientA(connection);
+        dummy_data.insertClaimTypeIntoClientB(connection);
+        dummy_data.insertClaimIntoClientB(connection);
         connection.end();
     });
 

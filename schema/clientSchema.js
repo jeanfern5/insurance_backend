@@ -3,10 +3,10 @@ const { buildSchema } = require('graphql');
 
 module.exports = buildSchema(`
     type CLAIMS {
-        claimId: ID!,
-        yaroUserId: ID!,
-        clientId: ID!,
-        claimAmount: Int!,
+        claimAddedDate: String!,
+        procedure: String!,
+        description: String!,
+        claimAmount: Int!
     }
     type CLAIM_TYPE {
         client_type_id: ID!,

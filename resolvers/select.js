@@ -14,6 +14,8 @@ const pool  = mysql.createPool({
 	'database': 'YaroDB'
 });
 
+const dateToString = date => new Date(date).toISOString();
+
 module.exports = {
 	listClaims: async (input) => {
 		let username = input[`username`];
@@ -70,55 +72,52 @@ module.exports = {
 	},
 	getClaim: async (args) => {
 		const claimId = args.claimId;
-		console.log("claimID", claimId);
+
 		return new Promise ((resolve, reject) =>
 		{pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT`, 
 		function (err, results){
 			if (err) {
-				console.log("ERROR:", err);
+				console.log("\nERROR:", err);
 				throw err;
 			}
 
 			for (let i=0; i<results.length; i++) {
 				let clientDB = results[i]['client_db_name'];
-				console.log('---->1', results[i]['client_db_name'])
 
-				pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE claim_id = ${claimId} `,
+				pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE claim_id = "${claimId}" `,
 				function (err, results){
 					if (err) {
-						console.log("ERROR:", err);
+						console.log("\nERROR:", err);
 						throw err;
 					}
 
-					if (!results[0]) {
+					const data = results[0];
+
+					if (!data) {
 						return;
 					} else {
-						let claimTypeId = results[0]['claim_type_id'];
 						let claim = {};
-						console.log('---->2', results)
 
-						// pool.query(`SELECT * FROM ${clientDB}.CLAIM_TYPE WHERE claim_type_id = ${claimTypeId} `,
-						// function (err, results){
-						// 	if (err) {
-						// 		console.log("ERROR:", err);
-						// 		throw err;
-						// 	}
+						pool.query(`SELECT claim_added_date, procedure_name, description, claim_amount FROM  
+								    (SELECT * FROM ${clientDB}.CLAIMS WHERE claim_id = "${claimId}") AS claim
+									JOIN
+									${clientDB}.CLAIM_TYPE AS claim_type 
+									ON
+									claim.claim_type_id = claim_type.claim_type_id`,
+						function (err, results){
+							if (err) {
+								console.log("\nERROR:", err);
+								throw err;
+							}
 
-						// 	// claim = ({ procedure: results[0]['procedure_name'], description: results[0]['description'] })
-						// 	claim.procedure = results[0]['procedure_name'];
-						// 	claim.description = results[0]['procedure_name'];
-						// 	console.log('---->3', claim)
-						// 	return claim;
-						// })
+							const data = results[0];
+							claim.claimAddedDate = dateToString(data['claim_added_date']);
+							claim.procedure = data['procedure_name'];
+							claim.description = data['description'];
+							claim.claimAmount = data['claim_amount'];
 
-						claim.claimId = results[0]['claim_id'];
-						claim.yaroUserId = results[0]['yaro_user_id'];
-						claim.clientId = results[0]['client_id'];
-						//claim.claimTypeId = results[0]['claim_type_id'];
-						claim.claimAmount = results[0]['claim_amount'];
-						console.log('---->4', claim)
-						resolve(claim) ;
-						
+							resolve(claim);
+						})
 					}
 				})
 			}

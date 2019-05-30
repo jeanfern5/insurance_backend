@@ -1,17 +1,17 @@
 const mysql = require('mysql');
 
 
-const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_PASSWORD = process.env.DB_PASSWORD;
 if (!DB_PASSWORD) {
-	    throw Error("Please set DB_PASSWORD environment variable to connect")
+	    throw Error("Please set DB_PASSWORD environment variable to connect");
 }
 
 const pool  = mysql.createPool({
-		  'connectionLimit' : 10,
-		  'host' : 'yarodb.c01iybcdwlow.us-east-2.rds.amazonaws.com',
-		  'user' : 'db_admin',
-			'password' : DB_PASSWORD,
-			'database': 'YaroDB'
+	'connectionLimit' : 10,
+	'host' : 'yarodb.c01iybcdwlow.us-east-2.rds.amazonaws.com',
+	'user' : 'db_admin',
+	'password' : DB_PASSWORD,
+	'database': 'YaroDB'
 });
 
 module.exports = {
@@ -23,135 +23,110 @@ module.exports = {
 			pool.query(`SELECT yaro_user_id FROM YaroDB.YARO_USER WHERE username = '${username}'`,
 				function (err, results) {
 					if (err) {
-						console.log("ERROR:", err);
+						console.log("\n ERROR:", err);
 						throw err;
 					}
 
-					let yaro_user_id = results[0][`yaro_user_id`];
-					console.log('---->yaro_user_id1', yaro_user_id);
-					resolve(yaro_user_id); 
+					let yaroUserId = results[0][`yaro_user_id`];
+					resolve(yaroUserId); 
 				}
 			)	
 		});
 
-		promise.then((yaro_user_id) => {
-			console.log('--->yaro_user_id2', yaro_user_id)
-			// SELECT client_id FROM YaroDB.YARO_ACTIVE_USER WHERE yaro_user_id = '${yaro_user_id}' AND active = 1
-			pool.query(`SELECT * FROM YaroDB.YARO_ACTIVE_USER WHERE yaro_user_id = '${yaro_user_id}' AND active = 1`,
+		promise.then((yaroUserId) => {
+			pool.query(`SELECT * FROM YaroDB.YARO_CLIENT`,
 				function (err, results){
 					if (err) {
 						console.log("ERROR:", err);
 						throw err;
 					}
-					let selectUnion = '';
 
 					for (let i=0; i<results.length; i++) {
-						let clientId = results[i]['client_id'];
+						let clientDB = results[i]['client_db_name'];
 
-						pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT WHERE client_id = ${clientId}`,
+						pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = ${yaroUserId} `,
 							function (err, results){
 								if (err) {
 									console.log("ERROR:", err);
 									throw err;
 								}
 
-								let clientDB = results[0]['client_db_name'];
-								console.log('---->3', results )
+								let result = results[0];
 
-								selectUnion += `SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}'`;
-								if (i != (results.length - 1)) {
-									selectUnion += ' UNION ';
-								}
+								console.log('---->1', result)
 
-								console.log('------>4', selectUnion);
-
-								// pool.query(`${select_str}`,
-								// 	function (err, results){
-								// 		if (err) {
-								// 			console.log("ERROR:", err);
-								// 			throw err;
-								// 		}
-
-								// 		console.log('------->5', results)
-								// 	}
-								// )
+							
+								
+								clients.push(result);
+								console.log('--->2', clients)
 							}
 						)
-
-
-
-
-
-					//-------
-					// pool.query(select_str,function()){
-
-					// }
-
-					// 	clientDB = results[i][`client_db_name`];
-					// 	console.log('---->clientDB3', clientDB)
-
-					// 	pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = '${yaro_user_id}' `,
-					// 		function(err, result){
-					// 			if (err) {
-					// 				console.log("ERROR:", err);
-					// 				throw err;
-					// 			}
-
-					// 			clients.append(result[clientDB]);
-					// 		}
-					// 	)
-					//---------
 					}
+					console.log('--->3', clients)
+					return clients;
 				}
 			)
-		})
-		
-
-		// return new Promise((resolve, reject) => {
-		// 	let response = [];
-
-			// pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT`,
-			// 	function (err, results){
-					// if (err) {
-					// 	console.log("ERROR:", err);
-					// 	throw err;
-					// }
-
-					// for (let i=0; i<results.length; i++) {
-					// 	let clientDB = results[i][`client_db_name`];
-					// 	console.log('---->', clientDB)
-
-					// 	pool.query(`SELECT * FROM ${clientDB}.CLAIMS`,
-					// 		function(err, result){
-					// 			if (err) {
-					// 				console.log("ERROR:", err);
-					// 				throw err;
-					// 			}
-
-					// 			response.append(result[clientDB]);
-					// 		}
-					// 	)
-					// }
-
-			// 		// for (clientDB in results[`client_db_name`]){
-			// 		// 	pool.query(`SELECT * FROM ${clientDB}.CLAIMS`,
-			// 		// 		function(err, result){
-			// 		// 			if (err) {
-			// 		// 				console.log("ERROR:", err);
-			// 		// 				throw err;
-			// 		// 			}
-
-			// 		// 			response.append(result[clientDB]);
-			// 		// 		}
-			// 		// 	)
-			// 		// }
-			// 	}
-			// )
-		// 	resolve(response);
-		// })
+		})//end of promise
 	},
-	getClaim: async (claimId) => {
-		
+	getClaim: async (args) => {
+		const claimId = args.claimId;
+		console.log("claimID", claimId);
+		return new Promise ((resolve, reject) =>
+		{pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT`, 
+		function (err, results){
+			if (err) {
+				console.log("ERROR:", err);
+				throw err;
+			}
+
+			for (let i=0; i<results.length; i++) {
+				let clientDB = results[i]['client_db_name'];
+				console.log('---->1', results[i]['client_db_name'])
+
+				pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE claim_id = ${claimId} `,
+				function (err, results){
+					if (err) {
+						console.log("ERROR:", err);
+						throw err;
+					}
+
+					if (!results[0]) {
+						return;
+					} else {
+						let claimTypeId = results[0]['claim_type_id'];
+						let claim = {};
+						console.log('---->2', results)
+
+						// pool.query(`SELECT * FROM ${clientDB}.CLAIM_TYPE WHERE claim_type_id = ${claimTypeId} `,
+						// function (err, results){
+						// 	if (err) {
+						// 		console.log("ERROR:", err);
+						// 		throw err;
+						// 	}
+
+						// 	// claim = ({ procedure: results[0]['procedure_name'], description: results[0]['description'] })
+						// 	claim.procedure = results[0]['procedure_name'];
+						// 	claim.description = results[0]['procedure_name'];
+						// 	console.log('---->3', claim)
+						// 	return claim;
+						// })
+
+						claim.claimId = results[0]['claim_id'];
+						claim.yaroUserId = results[0]['yaro_user_id'];
+						claim.clientId = results[0]['client_id'];
+						//claim.claimTypeId = results[0]['claim_type_id'];
+						claim.claimAmount = results[0]['claim_amount'];
+						console.log('---->4', claim)
+						resolve(claim) ;
+						
+					}
+				})
+			}
+		})})
+
 	},
 
 }
+
+
+//console.log(module.exports.getClaim({'claimId' : '1'}));

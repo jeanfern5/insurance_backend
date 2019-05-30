@@ -20,7 +20,7 @@ function createYaroDatabase(connection){
 
 function createYaroUserTable(connection) {
 	connection.query(`CREATE TABLE YaroDB.YARO_USER(
-		yaro_user_id INT AUTO_INCREMENT PRIMARY KEY,
+		yaro_user_id VARCHAR(32) UNIQUE PRIMARY KEY,
 		email VARCHAR(255) UNIQUE NOT NULL,
 		username VARCHAR(64) UNIQUE NOT NULL,
 		first_name VARCHAR(64) NOT NULL,
@@ -46,9 +46,9 @@ function createYaroUserTable(connection) {
 
 function createYaroClientTable(connection) {
 	connection.query(`CREATE TABLE YaroDB.YARO_CLIENT(
-		client_id INT AUTO_INCREMENT PRIMARY KEY,
-		client_db_name VARCHAR(255) NOT NULL,
-		client_name VARCHAR(255) NOT NULL,
+		client_id VARCHAR(32) UNIQUE PRIMARY KEY,
+		client_db_name VARCHAR(255) UNIQUE NOT NULL,
+		client_name VARCHAR(255) UNIQUE NOT NULL,
 		client_added_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	)`, function (error, results, fields) {
 			if (error) {
@@ -66,8 +66,8 @@ function createYaroClientTable(connection) {
 
 function createYaroActiveUserTable(connection) {
 	connection.query(`CREATE TABLE YaroDB.YARO_ACTIVE_USER(
-		yaro_user_id INT NOT NULL,
-		client_id INT NOT NULL,
+		yaro_user_id VARCHAR(32) NOT NULL,
+		client_id VARCHAR(32) NOT NULL,
 		active BOOL NOT NULL
 	)`, function (error, results, fields) {
 			if (error) {

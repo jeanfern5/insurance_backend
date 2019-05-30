@@ -20,24 +20,29 @@ function createClientDatabase(connection, clientName){
 function insertClientDetailsIntoYaroDB(connection, clientName){
 	let client_name = clientName.toUpperCase();
 	try {
-		connection.query(`INSERT INTO YaroDB.YARO_CLIENT(client_db_name, client_name)
-					 VALUES ("${client_name}", "${client_name}")`),
+		connection.query(`INSERT INTO YaroDB.YARO_CLIENT
+						  (client_id, client_db_name, client_name)
+						  VALUES 
+						  (uuid(), "${client_name}", "${client_name}")
+						`),
 
 		console.log(`Successfully added client details to YaroDB.YARO_CLIENT table`);
 	} catch {
-		console.log(`Error addeding client details to YaroDB.YARO_CLIENT table`);
+		console.log(`Error adding client details to YaroDB.YARO_CLIENT table`);
 
 	}
 };
 
 function createClientClaimsTable(connection, clientName){
 	let client_name = clientName.toUpperCase();
+
 	connection.query(`CREATE TABLE ${client_name}.CLAIMS (
-		claim_id INT AUTO_INCREMENT PRIMARY KEY,
-		yaro_user_id INT NOT NULL,
-		client_id INT NOT NULL,
-		claim_type_id INT NOT NULL,
-		claim_amount INT NOT NULL
+		claim_id VARCHAR(32) UNIQUE PRIMARY KEY,
+		claim_type_id VARCHAR(32) NOT NULL,
+		yaro_user_id VARCHAR(32) NOT NULL,
+		client_id VARCHAR(32) NOT NULL,
+		claim_amount DECIMAL(30, 2) NOT NULL,
+		claim_added_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	)`,function (error, results, fields) {
 			if (error) {
 				if (error.code === "ER_TABLE_EXISTS_ERROR") {
@@ -57,8 +62,8 @@ function createClientClaimsTable(connection, clientName){
 function createClientClaimTypeTable(connection, clientName) {
 	let client_name = clientName.toUpperCase();
 	connection.query(`CREATE TABLE ${client_name}.CLAIM_TYPE (
-		claim_type_id INT AUTO_INCREMENT PRIMARY KEY,
-		procedure_name VARCHAR(255) NOT NULL,
+		claim_type_id VARCHAR(32) UNIQUE PRIMARY KEY,
+		procedure_name VARCHAR(255) UNIQUE NOT NULL,
 		description VARCHAR(512) NOT NULL
 	)`, function (error, results, fields) {
 			if (error) {

@@ -23,61 +23,68 @@ module.exports = {
 
 		let promise = new Promise ((resolve, reject) => {
 			pool.query(`SELECT yaro_user_id FROM YaroDB.YARO_USER WHERE username = '${username}'`,
-				function (err, results) {
-					if (err) {
-						console.log("\n ERROR:", err);
-						throw err;
-					}
-
-					let yaroUserId = results[0][`yaro_user_id`];
-					resolve(yaroUserId); 
+			function (err, results) {
+				if (err) {
+					console.log("\n ---->ERROR retrieving yaro_user_id:", err);
+					throw err;
 				}
-			)	
+
+				let yaroUserId = results[0][`yaro_user_id`];
+				resolve(yaroUserId); 
+			})	
 		});
 
 		promise.then((yaroUserId) => {
+			return new Promise ((resolve, reject) => {
 			pool.query(`SELECT * FROM YaroDB.YARO_CLIENT`,
-				function (err, results){
-					if (err) {
-						console.log("ERROR:", err);
-						throw err;
-					}
-
-					for (let i=0; i<results.length; i++) {
-						let clientDB = results[i]['client_db_name'];
-
-						pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = ${yaroUserId} `,
-							function (err, results){
-								if (err) {
-									console.log("ERROR:", err);
-									throw err;
-								}
-
-								let result = results[0];
-
-								console.log('---->1', result)
-
-							
-								
-								clients.push(result);
-								console.log('--->2', clients)
-							}
-						)
-					}
-					console.log('--->3', clients)
-					return clients;
+			function (err, results){
+				if (err) {
+					console.log("\n---->ERROR retrieving clients databases:", err);
+					throw err;
 				}
-			)
+
+				for (let i=0; i<results.length; i++) {
+					let clientDB = results[i]['client_db_name'];
+
+					pool.query(`SELECT claim_id, claim_added_date, procedure_name, description, claim_amount FROM  
+								(SELECT * FROM ${clientDB}.CLAIMS WHERE yaro_user_id = "${yaroUserId}") AS claims
+								JOIN
+								${clientDB}.CLAIM_TYPE AS claim_type 
+								ON
+								claims.claim_type_id = claim_type.claim_type_id`,
+					function (err, results){
+						if (err) {
+							console.log("\n---->ERROR retrieving claims data:", err);
+							throw err;
+						}
+						let claims = {};
+
+
+						resolve(results.map(result => {
+							claims.claimId = result['claim_id'];
+							claims.claimAddedDate = result['claim_added_date'];
+							claims.client = clientDB;
+							claims.procedure = result['procedure_name'];
+							claims.description = result['description'];
+							claims.claimAmount = result['claim_amount'];
+
+							console.log('---->3', claims)
+							resolve(claims)
+						}))
+					})
+				}
+			})
+
+			})
 		})//end of promise
 	},
 	getClaim: async (args) => {
 		const claimId = args.claimId;
 
-		return new Promise ((resolve, reject) =>
-		{pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT`, 
+		return new Promise ((resolve, reject) => {
+		pool.query(`SELECT client_db_name FROM YaroDB.YARO_CLIENT`, 
 		function (err, results){
 			if (err) {
-				console.log("\nERROR:", err);
 				throw err;
 			}
 
@@ -87,7 +94,6 @@ module.exports = {
 				pool.query(`SELECT * FROM ${clientDB}.CLAIMS WHERE claim_id = "${claimId}" `,
 				function (err, results){
 					if (err) {
-						console.log("\nERROR:", err);
 						throw err;
 					}
 
@@ -106,7 +112,6 @@ module.exports = {
 									claim.claim_type_id = claim_type.claim_type_id`,
 						function (err, results){
 							if (err) {
-								console.log("\nERROR:", err);
 								throw err;
 							}
 

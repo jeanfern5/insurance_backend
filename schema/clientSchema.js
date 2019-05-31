@@ -3,15 +3,12 @@ const { buildSchema } = require('graphql');
 
 module.exports = buildSchema(`
     type CLAIMS {
+        claimId: ID!,
         claimAddedDate: String!,
+        client: String!,
         procedure: String!,
         description: String!,
         claimAmount: Int!
-    }
-    type CLAIM_TYPE {
-        client_type_id: ID!,
-        procedure: String!,
-        description: String!,
     }
     type RootQuery {
         listClaims(username: String!): [CLAIMS!]!

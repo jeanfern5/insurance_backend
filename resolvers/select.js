@@ -18,7 +18,7 @@ const pool  = mysql.createPool({
 const dateToString = (date) => new Date(date).toISOString();
 
 module.exports = {
-	listClaims: async (input) => {
+	listClaims: async (input, res) => {
 		let username = input[`username`];
 		
 		const getUserId = async (username) => { 
@@ -138,8 +138,10 @@ module.exports = {
 		})})
 
 	},
-
+	pool,
 }
+
+
 
 
 // console.log(module.exports.listClaims({'username' : 'tinabelch'}));

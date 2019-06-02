@@ -1,0 +1,167 @@
+
+> insurance_backend@1.0.0 start /workspace
+> nodemon index.js
+
+[33m[nodemon] 1.19.0[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching: *.*[39m
+[32m[nodemon] starting `node index.js`[39m
+events.js:170
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event at:
+    at fs.read (internal/fs/streams.js:167:12)
+    at FSReqCallback.wrapper [as oncomplete] (fs.js:478:5)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! insurance_backend@1.0.0 start: `nodemon index.js`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the insurance_backend@1.0.0 start script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-06-02T19_09_12_189Z-debug.log
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+
+Promise {
+  <rejected> TypeError: Cannot read property 'ok' of undefined
+      at Object.listClaims (/workspace/resolvers/select.js:84:29)
+      at Object.<anonymous> (/workspace/resolvers/select.js:148:28)
+      at Module._compile (internal/modules/cjs/loader.js:816:30)
+      at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+      at Module.load (internal/modules/cjs/loader.js:685:32)
+      at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+      at Module.require (internal/modules/cjs/loader.js:723:19)
+      at require (internal/modules/cjs/helpers.js:14:16)
+      at Object.<anonymous> (/workspace/index.js:5:19)
+      at Module._compile (internal/modules/cjs/loader.js:816:30) }
+events.js:170
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8081
+    at Server.setupListenHandle [as _listen2] (net.js:1259:14)
+    at listenInCluster (net.js:1307:12)
+    at Server.listen (net.js:1395:7)
+    at Function.listen (/workspace/node_modules/express/lib/application.js:618:24)
+    at Object.<anonymous> (/workspace/index.js:17:5)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:877:12)
+Emitted 'error' event at:
+    at emitErrorNT (net.js:1286:8)
+    at processTicksAndRejections (internal/process/task_queues.js:81:17)
+    at process.runNextTicks [as _tickCallback] (internal/process/task_queues.js:56:3)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:880:11)
+    at internal/main/run_main_module.js:21:11
+Promise {
+  <rejected> TypeError: Cannot read property 'ok' of undefined
+      at Object.listClaims (/workspace/resolvers/select.js:84:29)
+      at Object.<anonymous> (/workspace/resolvers/select.js:148:28)
+      at Module._compile (internal/modules/cjs/loader.js:816:30)
+      at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+      at Module.load (internal/modules/cjs/loader.js:685:32)
+      at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+      at Module.require (internal/modules/cjs/loader.js:723:19)
+      at require (internal/modules/cjs/helpers.js:14:16)
+      at Object.<anonymous> (/workspace/index.js:5:19)
+      at Module._compile (internal/modules/cjs/loader.js:816:30) }
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+
+(node:8305) UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'ok' of undefined
+    at Object.listClaims (/workspace/resolvers/select.js:84:29)
+    at Object.<anonymous> (/workspace/resolvers/select.js:148:28)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/workspace/index.js:5:19)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+(node:8305) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:8305) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+Promise {
+  <rejected> TypeError: Cannot read property 'ok' of undefined
+      at Object.listClaims (/workspace/resolvers/select.js:84:29)
+      at Object.<anonymous> (/workspace/resolvers/select.js:148:28)
+      at Module._compile (internal/modules/cjs/loader.js:816:30)
+      at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+      at Module.load (internal/modules/cjs/loader.js:685:32)
+      at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+      at Module.require (internal/modules/cjs/loader.js:723:19)
+      at require (internal/modules/cjs/helpers.js:14:16)
+      at Object.<anonymous> (/workspace/index.js:5:19)
+      at Module._compile (internal/modules/cjs/loader.js:816:30) }
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+
+(node:8320) UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'ok' of undefined
+    at Object.listClaims (/workspace/resolvers/select.js:84:29)
+    at Object.<anonymous> (/workspace/resolvers/select.js:148:28)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/workspace/index.js:5:19)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+(node:8320) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:8320) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+Promise { <pending> }
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+
+/workspace/node_modules/mysql/lib/protocol/Parser.js:437
+      throw err; // Rethrow non-MySQL errors
+      ^
+
+ReferenceError: ß is not defined
+    at Query.<anonymous> (/workspace/resolvers/select.js:97:1)
+    at Query.<anonymous> (/workspace/node_modules/mysql/lib/Connection.js:525:10)
+    at Query._callback (/workspace/node_modules/mysql/lib/Connection.js:491:16)
+    at Query.Sequence.end (/workspace/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/workspace/node_modules/mysql/lib/protocol/sequences/Query.js:139:8)
+    at Query.EofPacket (/workspace/node_modules/mysql/lib/protocol/sequences/Query.js:123:8)
+    at Protocol._parsePacket (/workspace/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/workspace/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/workspace/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/workspace/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+
+/workspace/node_modules/mysql/lib/protocol/Parser.js:437
+      throw err; // Rethrow non-MySQL errors
+      ^
+
+ReferenceError: ß is not defined
+    at Query.<anonymous> (/workspace/resolvers/select.js:97:1)
+    at Query.<anonymous> (/workspace/node_modules/mysql/lib/Connection.js:525:10)
+    at Query._callback (/workspace/node_modules/mysql/lib/Connection.js:491:16)
+    at Query.Sequence.end (/workspace/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/workspace/node_modules/mysql/lib/protocol/sequences/Query.js:139:8)
+    at Query.EofPacket (/workspace/node_modules/mysql/lib/protocol/sequences/Query.js:123:8)
+    at Protocol._parsePacket (/workspace/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/workspace/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/workspace/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/workspace/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+
+
+========== Express GraphQL Server Now Running On localhost:8081/graphql ==========
+

@@ -1,9 +1,9 @@
 const expect = require('chai').expect;
 const should = require('chai').should();
-
 const url = `http://localhost:8081`;
 const request = require('supertest')(url);
 const { pool } = require('../resolvers/select');
+
 
 const checkDataTypes = (claim) => {
     expect(claim['claimId']).to.be.a('string');
@@ -14,8 +14,13 @@ const checkDataTypes = (claim) => {
     expect(claim['claimAmount']).to.be.a('number');
 };
 
+const claimLength = (claim) => {
+    return (Object.keys(claim).length);
+};
+
+
 describe('GraphQL', () => {
-    it("Should connect without an error", (done) => {
+    it("Should connect to AWS RDS without an error", (done) => {
         pool.getConnection((err, connection) => {
             if (err) return done(err);
 
@@ -23,7 +28,7 @@ describe('GraphQL', () => {
         });
     });
 
-    it('Returns all claims from username tinabelch', (done) => {
+    it('Should return all claims from username tinabelch', (done) => {
         request.post('/graphql')
         .expect(200)
         .send({ query: `
@@ -46,9 +51,9 @@ describe('GraphQL', () => {
             expect(claims).to.have.lengthOf(3);
 
             for (let i=0; i<claims.length; i++) {
-                const claimSize = Object.keys(claims[i]).length;
+                expect(claimLength(claims[i])).to.equal(6);
 
-                expect(claimSize).to.equal(6);
+                checkDataTypes(claims[i]);
 
                 should.exist(claims[i]['claimId']);
                 should.exist(claims[i]['claimAddedDate']);
@@ -56,15 +61,13 @@ describe('GraphQL', () => {
                 should.exist(claims[i]['procedure']);
                 should.exist(claims[i]['description']);
                 should.exist(claims[i]['claimAmount']);
-
-                checkDataTypes(claims[i]);
-            }
+            };
 
             done();
         })  
     })
 
-    it('Returns details from claimId 8ee843eb-830b-11e9-85ce-02568a3c', (done) => {
+    it('Should return details from claimId 8ee843eb-830b-11e9-85ce-02568a3c', (done) => {
         request.post('/graphql')
         .expect(200)
         .send({ query: `
@@ -83,9 +86,10 @@ describe('GraphQL', () => {
             if (err) return done(err);
 
             const claim = res.body.data.getClaim;
-            const claimSize = Object.keys(claim).length;
 
-            expect(claimSize).to.equal(6);
+            expect(claimLength(claim)).to.equal(6);
+
+            checkDataTypes(claim);
 
             expect(claim['claimId']).to.equal('8ee843eb-830b-11e9-85ce-02568a3c');
             should.exist(claim['claimAddedDate']);
@@ -94,9 +98,8 @@ describe('GraphQL', () => {
             expect(claim['description']).to.equal('broken leg');
             expect(claim['claimAmount']).to.equal(7500);
 
-            checkDataTypes(claim);
-
             done();
         })  
     })
 });
+

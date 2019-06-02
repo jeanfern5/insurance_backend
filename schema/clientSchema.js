@@ -1,5 +1,6 @@
-//GraphQL Schema
+//GraphQL Client Schema
 const { buildSchema } = require('graphql');
+
 
 module.exports = buildSchema(`
     type CLAIMS {
@@ -17,4 +18,4 @@ module.exports = buildSchema(`
     schema {
         query: RootQuery
     }
-`)
+`);

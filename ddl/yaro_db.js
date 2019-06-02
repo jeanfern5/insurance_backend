@@ -68,7 +68,8 @@ function createYaroActiveUserTable(connection) {
 	connection.query(`CREATE TABLE YaroDB.YARO_ACTIVE_USER(
 		yaro_user_id VARCHAR(32) NOT NULL,
 		client_id VARCHAR(32) NOT NULL,
-		active BOOL NOT NULL
+		active BOOL NOT NULL,
+		UNIQUE yaro_user_id_client_id (yaro_user_id, client_id)
 	)`, function (error, results, fields) {
 			if (error) {
 				if (error.code === "ER_TABLE_EXISTS_ERROR") {

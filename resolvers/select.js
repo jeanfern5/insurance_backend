@@ -1,6 +1,5 @@
 const mysql = require('mysql');
-const Q = require('q');
-const deferred = Q.defer();
+const deferred = require('q').defer();
 
 const DB_PASSWORD = process.env.DB_PASSWORD;
 if (!DB_PASSWORD) {

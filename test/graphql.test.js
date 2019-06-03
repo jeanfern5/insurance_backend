@@ -1,8 +1,9 @@
+//Tests
 const expect = require('chai').expect;
 const should = require('chai').should();
 const url = `http://localhost:8081`;
 const request = require('supertest')(url);
-const { pool } = require('../resolvers/select');
+const { pool } = require('../utils/utils');
 
 
 const checkDataTypes = (claim) => {

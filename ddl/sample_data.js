@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-// Stand alone script for populating databases, tables, and rows with sample data
+// Sample data for populating YaroDB, ClientA, and ClientB databases, tables, and rows
 
 
 function insertClientADetailsIntoYaroDB(connection){
@@ -11,7 +10,7 @@ function insertClientADetailsIntoYaroDB(connection){
         `),
         console.log(`Successfully added client details to YaroDB.YARO_CLIENT table`);
 	} catch {
-	    console.log(`Error adding client details to YaroDB.YARO_CLIENT table`);
+        throw new Error(`Error adding client details to YaroDB.YARO_CLIENT table`);
 	}
 };
 
@@ -24,7 +23,7 @@ function insertClientBDetailsIntoYaroDB(connection){
         `),
         console.log(`Successfully added client details to YaroDB.YARO_CLIENT table`);
 	} catch {
-	    console.log(`Error adding client details to YaroDB.YARO_CLIENT table`);
+        throw new Error(`Error adding client details to YaroDB.YARO_CLIENT table`);
 	}
 };
 
@@ -39,7 +38,7 @@ function insertUserDetailsIntoYaroDB(connection){
         `),
 		console.log(`Successfully added user details to YaroDB.YARO_USER table`);
 	} catch {
-		console.log(`Error adding user details to YaroDB.YARO_USER table`);
+        throw new Error(`Error adding user details to YaroDB.YARO_USER table`);
 	}
 };
 
@@ -55,7 +54,7 @@ function insertActiveUserIntoYaroDB(connection){
         `),
 		console.log(`Successfully added user details to YaroDB.YARO_ACTIVE_USER table`);
 	} catch {
-		console.log(`Error adding user details to YaroDB.YARO_ACTIVE_USER table`);
+        throw new Error(`Error adding user details to YaroDB.YARO_ACTIVE_USER table`);
 	}
 };
 
@@ -84,7 +83,7 @@ function insertClaimIntoClientA(connection, ClientA){
         `),
 		console.log(`Successfully added claim details to ${ClientA}.CLAIMS table`);
 	} catch {
-		console.log(`Error adding claim details to ${ClientA}.CLAIMS table`);
+		throw new Error(`Error adding claim details to ${ClientA}.CLAIMS table`);
 	}
 };
 
@@ -98,7 +97,7 @@ function insertClaimTypeIntoClientB(connection, ClientB){
         `),
 		console.log(`Successfully added claim details to ${ClientB}.CLAIM_TYPE table`);
 	} catch {
-		console.log(`Error adding claim details to ${ClientB}.CLAIM_TYPE table`);
+		throw new Error(`Error adding claim details to ${ClientB}.CLAIM_TYPE table`);
 	}
 };
 
@@ -112,11 +111,9 @@ function insertClaimIntoClientB(connection, ClientB){
         `),
 		console.log(`Successfully added claim details to ${ClientB}.CLAIMS table`);
 	} catch {
-		console.log(`Error adding claim details to ${ClientB}.CLAIMS table`);
+		throw new Error(`Error adding claim details to ${ClientB}.CLAIMS table`);
 	}
 };
-
-
 
 
 module.exports = {

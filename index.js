@@ -13,8 +13,7 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true,
 }));
 
-
 app.listen(8081, () => {
     console.log('\n========== Express GraphQL Server Now Running On localhost:8081/graphql ==========\n');  
-})
+});
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+//Cli for creating Yaro database, client database, and adding sample data
 const program = require('commander');
 
 const utils = require('../utils/utils');

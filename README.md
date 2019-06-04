@@ -28,7 +28,7 @@ This application is used to track individual users and claims across multiple he
        'user' : 'USERNAME'
        ```
     * Add password:
-      * If using docker, type `export PASSWORD=SECRET_PASSWORD`
+      * Type `export PASSWORD=SECRET_PASSWORD` in terminal
 4. Where there is a package.json, type `npm start`
 
 

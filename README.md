@@ -8,7 +8,7 @@ This application is used to track individual users and claims across multiple he
 
 ## Table of Contents
 * [Local Setup](#local-setup)
-* [GraphiQL Queries](#graphiql-queries)
+* [GraphQL Queries](#graphql-queries)
 * [How to Create and Populate Database using the CLI](#how-to-create-and-populate-database-using-the-cli)
 * [Database Schema](#database-schema)
 
@@ -32,7 +32,7 @@ This application is used to track individual users and claims across multiple he
 4. Where there is a package.json, type `npm start`
 
 
-## GraphiQL Queries
+## GraphQL Queries
 
 1. listClaims
     * takes in a username
